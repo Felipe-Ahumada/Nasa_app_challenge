@@ -11,24 +11,16 @@ const Enhanced3DTest = () => {
     setWebGL3DSupported(is3DSupported());
   }, []);
 
-  // Test data scenarios
+  // 🪐 Test Scenarios
   const testScenarios = {
     small: {
       name: "Small Asteroid (Chelyabinsk-like)",
       asteroidData: {
         id: "test-small",
         name: "Test Small Asteroid",
-        estimatedDiameter: {
-          kilometers: {
-            estimated_diameter_max: 0.02 // 20 meters
-          }
-        },
+        estimatedDiameter: { kilometers: { estimated_diameter_max: 0.02 } },
         isPotentiallyHazardousAsteroid: false,
-        closeApproachData: [{
-          relativeVelocity: {
-            kilometersPerSecond: "18.5"
-          }
-        }]
+        closeApproachData: [{ relativeVelocity: { kilometersPerSecond: "18.5" } }]
       },
       simulationResults: {
         energy: 5.4e14,
@@ -40,7 +32,7 @@ const Enhanced3DTest = () => {
         estimatedCasualties: 1500,
         economicImpact: 33000000
       },
-      impactLocation: { lat: 55.1544, lng: 61.4292 }, // Chelyabinsk
+      impactLocation: { lat: 55.1544, lng: 61.4292 },
       impactAngle: 18,
       impactVelocity: 18.5
     },
@@ -49,17 +41,9 @@ const Enhanced3DTest = () => {
       asteroidData: {
         id: "test-medium",
         name: "Test Medium Asteroid",
-        estimatedDiameter: {
-          kilometers: {
-            estimated_diameter_max: 0.06 // 60 meters
-          }
-        },
+        estimatedDiameter: { kilometers: { estimated_diameter_max: 0.06 } },
         isPotentiallyHazardousAsteroid: true,
-        closeApproachData: [{
-          relativeVelocity: {
-            kilometersPerSecond: "27.0"
-          }
-        }]
+        closeApproachData: [{ relativeVelocity: { kilometersPerSecond: "27.0" } }]
       },
       simulationResults: {
         energy: 1.5e16,
@@ -68,10 +52,10 @@ const Enhanced3DTest = () => {
         craterDepth: 0.2,
         severity: 'severe',
         affectedArea: 2150,
-        estimatedCasualties: 0, // Remote area
+        estimatedCasualties: 0,
         economicImpact: 0
       },
-      impactLocation: { lat: 60.8858, lng: 101.8917 }, // Tunguska
+      impactLocation: { lat: 60.8858, lng: 101.8917 },
       impactAngle: 30,
       impactVelocity: 27.0
     },
@@ -80,29 +64,21 @@ const Enhanced3DTest = () => {
       asteroidData: {
         id: "test-large",
         name: "Test Large Asteroid",
-        estimatedDiameter: {
-          kilometers: {
-            estimated_diameter_max: 10 // 10 km
-          }
-        },
+        estimatedDiameter: { kilometers: { estimated_diameter_max: 10 } },
         isPotentiallyHazardousAsteroid: true,
-        closeApproachData: [{
-          relativeVelocity: {
-            kilometersPerSecond: "30.0"
-          }
-        }]
+        closeApproachData: [{ relativeVelocity: { kilometersPerSecond: "30.0" } }]
       },
       simulationResults: {
         energy: 4.2e23,
-        tntEquivalent: 100000000000000, // 100 trillion tons
+        tntEquivalent: 100000000000000,
         craterDiameter: 150,
         craterDepth: 20,
         severity: 'catastrophic',
-        affectedArea: 70000000, // Global
+        affectedArea: 70000000,
         estimatedCasualties: 6000000000,
-        economicImpact: 100000000000000 // 100 trillion
+        economicImpact: 100000000000000
       },
-      impactLocation: { lat: 21.4, lng: -89.5 }, // Chicxulub
+      impactLocation: { lat: 21.4, lng: -89.5 },
       impactAngle: 60,
       impactVelocity: 30.0
     }
@@ -136,7 +112,6 @@ const Enhanced3DTest = () => {
           </Alert.Heading>
           <p>
             Your browser doesn't support WebGL, which is required for the Enhanced 3D visualization.
-            Please try using a modern browser like Chrome, Firefox, or Edge.
           </p>
         </Alert>
       </Container>
@@ -144,173 +119,153 @@ const Enhanced3DTest = () => {
   }
 
   return (
-    <Container className="py-5" style={{ marginTop: '100px' }}>
-      <Row>
-        <Col>
-          <h1>
-            <i className="bi bi-cpu-fill me-2"></i>
-            Enhanced 3D Animation Test
-          </h1>
-          <p className="text-white mb-4">
-            Test the new enhanced 3D asteroid impact animation system with realistic scenarios
-          </p>
-        </Col>
-      </Row>
+    <div style={{
+      background: 'radial-gradient(circle at top, #0b0b15 0%, #000 100%)',
+      color: '#fff',
+      minHeight: '100vh',
+      paddingTop: '80px'
+    }}>
+      <Container fluid="lg">
+        <Row className="mb-4">
+          <Col>
+            <h1 className="display-5 fw-bold text-glow">
+              <i className="bi bi-cpu-fill me-2 text-warning"></i>
+              Enhanced 3D Animation Test
+            </h1>
+            <p className="text-muted">
+              Test the new enhanced 3D asteroid impact animation system with realistic scenarios.
+            </p>
+          </Col>
+        </Row>
 
-      <Row>
-        {/* Test Controls */}
-        <Col lg={4}>
-          <Card className="glass-effect mb-4">
-            <Card.Header>
-              <h5><i className="bi bi-sliders text-white me-2"></i>Test Controls</h5>
-            </Card.Header>
-            <Card.Body>
-              {/* Scenario Selection */}
-              <Form.Group className="mb-3">
-                <Form.Label>Test Scenario</Form.Label>
-                <Form.Select
-                  className='text-white bg-dark'
-                  value={testScenario}
-                  onChange={(e) => {
-                    setTestScenario(e.target.value);
-                    setAnimate(false); // Reset animation
-                  }}
-                >
-                  <option value="small">Small Asteroid (Chelyabinsk-like)</option>
-                  <option value="medium">Medium Asteroid (Tunguska-like)</option>
-                  <option value="large">Large Asteroid (Chicxulub-like)</option>
-                </Form.Select>
-              </Form.Group>
+        <Row>
+          {/* Left Panel */}
+          <Col lg={4}>
+            <Card className="glass-card mb-4 p-2">
+              <Card.Header className="border-secondary text-uppercase fw-bold text-warning">
+                <i className="bi bi-sliders me-2"></i> Test Controls
+              </Card.Header>
+              <Card.Body>
+                {/* Scenario Selector */}
+                <Form.Group className="mb-3">
+                  <Form.Label>Test Scenario</Form.Label>
+                  <Form.Select
+                    className="bg-dark text-light border-secondary"
+                    value={testScenario}
+                    onChange={(e) => {
+                      setTestScenario(e.target.value);
+                      setAnimate(false);
+                    }}
+                  >
+                    <option value="small">Small Asteroid (Chelyabinsk-like)</option>
+                    <option value="medium">Medium Asteroid (Tunguska-like)</option>
+                    <option value="large">Large Asteroid (Chicxulub-like)</option>
+                  </Form.Select>
+                </Form.Group>
 
-              {/* Scenario Info */}
-              <Card className="mb-3 bg-dark border-secondary">
-                <Card.Body className="p-3">
-                  <h6 className="text-primary">{currentScenario.asteroidData.name}</h6>
-                  <small className="text-muted text-white d-block">
-                    <strong>Diameter:</strong> {currentScenario.asteroidData.estimatedDiameter.kilometers.estimated_diameter_max} km
-                  </small>
-                  <small className="text-muted text-white d-block">
-                    <strong>Velocity:</strong> {currentScenario.asteroidData.closeApproachData[0].relativeVelocity.kilometersPerSecond} km/s
-                  </small>
-                  <small className="text-muted text-white d-block">
-                    <strong>Impact Angle:</strong> {currentScenario.impactAngle}°
-                  </small>
-                  <small className="text-muted text-white d-block">
-                    <strong>Severity:</strong>{' '}
-                    <Badge bg={getSeverityColor(currentScenario.simulationResults.severity)}>
-                      {currentScenario.simulationResults.severity.toUpperCase()}
-                    </Badge>
-                  </small>
-                </Card.Body>
-              </Card>
+                {/* Info */}
+                <Card className="bg-black border-secondary mb-3">
+                  <Card.Body>
+                    <h6 className="text-info mb-2">{currentScenario.asteroidData.name}</h6>
+                    <div className="small text-white">
+                      <div><b>Diameter:</b> {currentScenario.asteroidData.estimatedDiameter.kilometers.estimated_diameter_max} km</div>
+                      <div><b>Velocity:</b> {currentScenario.asteroidData.closeApproachData[0].relativeVelocity.kilometersPerSecond} km/s</div>
+                      <div><b>Impact Angle:</b> {currentScenario.impactAngle}°</div>
+                      <div>
+                        <b>Severity:</b>{' '}
+                        <Badge bg={getSeverityColor(currentScenario.simulationResults.severity)}>
+                          {currentScenario.simulationResults.severity.toUpperCase()}
+                        </Badge>
+                      </div>
+                    </div>
+                  </Card.Body>
+                </Card>
 
-              {/* Animation Controls */}
-              <div className="d-grid gap-2">
-                <Button
-                  variant={animate ? 'danger' : 'success'}
-                  size="lg"
-                  onClick={() => setAnimate(!animate)}
-                >
-                  <i className={`bi bi-${animate ? 'stop' : 'play'}-circle me-2`}></i>
-                  {animate ? 'Stop Animation' : 'Start Animation'}
-                </Button>
-              </div>
-
-              {/* Performance Info */}
-              <Alert variant="info" className="mt-3 mb-0">
-                <h6><i className="bi bi-info-circle me-2"></i>Enhanced Features</h6>
-                <ul className="mb-0 small">
-                  <li>Physics-based trajectory simulation</li>
-                  <li>Advanced particle systems (plasma, explosion, debris)</li>
-                  <li>Realistic material shaders</li>
-                  <li>Performance optimization (LOD, pooling)</li>
-                  <li>Interactive camera controls</li>
-                  <li>Real-time animation timeline</li>
-                </ul>
-              </Alert>
-            </Card.Body>
-          </Card>
-        </Col>
-
-        {/* 3D Visualization */}
-        <Col lg={8}>
-          <Card className="glass-effect">
-            <Card.Header>
-              <h5>
-                <i className="bi bi-cpu me-2"></i>
-                Enhanced 3D Impact Simulation
-              </h5>
-            </Card.Header>
-            <Card.Body className="p-0">
-              <div style={{ height: '600px', width: '100%', background: '#000' }}>
-                <SafeEnhancedImpact3D
-                  simulationData={{
-                    impactData: currentScenario.simulationResults,
-                    asteroidData: currentScenario.asteroidData,
-                    impactLocation: currentScenario.impactLocation,
-                    impactAngle: currentScenario.impactAngle,
-                    impactVelocity: currentScenario.impactVelocity,
-                    animate: animate
-                  }}
-                  onAnimationComplete={() => setAnimate(false)}
-                />
-                
-                {/* Instructions */}
-                <div style={{
-                  position: 'absolute',
-                  bottom: '10px',
-                  left: '10px',
-                  background: 'rgba(0, 0, 0, 0.8)',
-                  color: '#ffffff',
-                  padding: '8px 12px',
-                  borderRadius: '6px',
-                  fontSize: '12px',
-                  zIndex: 1000
-                }}>
-                  <i className="bi bi-mouse me-1"></i>
-                  Drag to rotate • Scroll to zoom • Click UI controls for settings
+                {/* Animation Button */}
+                <div className="d-grid gap-2 mb-4">
+                  <Button
+                    variant={animate ? 'danger' : 'success'}
+                    size="lg"
+                    className="fw-bold btn-glow"
+                    onClick={() => setAnimate(!animate)}
+                  >
+                    <i className={`bi bi-${animate ? 'stop-circle' : 'play-circle'} me-2`}></i>
+                    {animate ? 'Stop Animation' : 'Start Animation'}
+                  </Button>
                 </div>
-              </div>
-            </Card.Body>
-          </Card>
 
-          {/* Results Preview */}
-          <Card className="glass-effect mt-4">
-            <Card.Header>
-              <h6><i className="bi bi-bar-chart me-2"></i>Impact Results Preview</h6>
-            </Card.Header>
-            <Card.Body>
-              <Row>
-                <Col md={3}>
-                  <div className="text-center">
+                {/* Enhanced Features */}
+                <div className="small text-muted">
+                  <h6 className="text-warning mb-2"><i className="bi bi-stars me-2"></i>Enhanced Features</h6>
+                  <ul className="mb-0">
+                    <li>Physics-based trajectory simulation</li>
+                    <li>Advanced particle systems (explosion & debris)</li>
+                    <li>Realistic material shaders</li>
+                    <li>Performance optimization (LOD, pooling)</li>
+                    <li>Interactive camera controls</li>
+                    <li>Real-time timeline</li>
+                  </ul>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+
+          {/* Right 3D Visualization */}
+          <Col lg={8}>
+            <Card className="glass-card border-secondary shadow-lg">
+              <Card.Header className="fw-bold text-warning text-uppercase border-secondary">
+                <i className="bi bi-globe2 me-2"></i> Enhanced 3D Impact Simulation
+              </Card.Header>
+              <Card.Body className="p-0 position-relative">
+                <div style={{ height: '600px', width: '100%', background: '#000' }}>
+                  <SafeEnhancedImpact3D
+                    simulationData={{
+                      impactData: currentScenario.simulationResults,
+                      asteroidData: currentScenario.asteroidData,
+                      impactLocation: currentScenario.impactLocation,
+                      impactAngle: currentScenario.impactAngle,
+                      impactVelocity: currentScenario.impactVelocity,
+                      animate: animate
+                    }}
+                    onAnimationComplete={() => setAnimate(false)}
+                  />
+                  <div className="position-absolute bottom-0 start-0 p-2 small text-muted" style={{ background: 'rgba(0,0,0,0.6)', borderRadius: '4px' }}>
+                    Drag to rotate • Scroll to zoom • Click UI controls for settings
+                  </div>
+                </div>
+              </Card.Body>
+            </Card>
+
+            {/* Result Summary */}
+            <Card className="glass-card mt-4 border-secondary">
+              <Card.Header className="text-uppercase fw-bold text-info border-secondary">
+                <i className="bi bi-bar-chart me-2"></i> Impact Results Preview
+              </Card.Header>
+              <Card.Body>
+                <Row className="text-center">
+                  <Col md={3}>
                     <h6 className="text-primary">Energy</h6>
-                    <div>{formatNumber(currentScenario.simulationResults.energy)} J</div>
-                  </div>
-                </Col>
-                <Col md={3}>
-                  <div className="text-center">
+                    <div className="fw-bold text-glow-blue">{formatNumber(currentScenario.simulationResults.energy)} J</div>
+                  </Col>
+                  <Col md={3}>
                     <h6 className="text-warning">Crater</h6>
-                    <div>{currentScenario.simulationResults.craterDiameter} km</div>
-                  </div>
-                </Col>
-                <Col md={3}>
-                  <div className="text-center">
+                    <div className="fw-bold text-glow-orange">{currentScenario.simulationResults.craterDiameter} km</div>
+                  </Col>
+                  <Col md={3}>
                     <h6 className="text-danger">Affected Area</h6>
-                    <div>{formatNumber(currentScenario.simulationResults.affectedArea)} km²</div>
-                  </div>
-                </Col>
-                <Col md={3}>
-                  <div className="text-center">
-                    <h6 className="text-info">TNT Equivalent</h6>
-                    <div>{formatNumber(currentScenario.simulationResults.tntEquivalent)} tons</div>
-                  </div>
-                </Col>
-              </Row>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+                    <div className="fw-bold text-glow-red">{formatNumber(currentScenario.simulationResults.affectedArea)} km²</div>
+                  </Col>
+                  <Col md={3}>
+                    <h6 className="text-success">TNT Equivalent</h6>
+                    <div className="fw-bold text-glow-green">{formatNumber(currentScenario.simulationResults.tntEquivalent)} tons</div>
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 };
 

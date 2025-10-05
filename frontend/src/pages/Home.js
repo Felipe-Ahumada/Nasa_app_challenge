@@ -38,17 +38,17 @@ const Home = () => {
             <Row className="align-items-center min-vh-100">
               <Col lg={6}>
                 <h1 className="display-4 fw-bold mb-4 text-glow">
-                  Zuricatas Simulator
+                  AstroZuri
                 </h1>
                 <p className="lead mb-4 text-secondary">
-                  Explore asteroid impact scenarios using real NASA data. Model devastating 
-                  collisions, predict consequences, and develop mitigation strategies to 
-                  protect our planet.
+                  Explore real NASA data to simulate asteroid impact scenarios. 
+                  Model catastrophic collisions, analyze their potential effects, 
+                  and design effective mitigation strategies to safeguard our planet.
                 </p>
                 <p className="mb-4">
-                  Built for the <strong>2025 NASA Space Apps Challenge</strong> - 
-                  addressing the "Meteor Madness" challenge with cutting-edge simulation 
-                  technology and real-time collaboration.
+                  Developed for the 2025 NASA Space Apps Challenge, 
+                  this project tackles the “Meteor Madness” challenge 
+                  through advanced simulation tools and real-time collaborative technology.
                 </p>
                 <div className="d-flex gap-3 flex-wrap">
                   {isAuthenticated ? (

@@ -12,7 +12,7 @@ const Navigation = () => {
         <LinkContainer to="/">
           <Navbar.Brand>
             <i className="bi bi-rocket-takeoff me-2"></i>
-            Zuricatas
+            AstroZuri
           </Navbar.Brand>
         </LinkContainer>
         
@@ -52,7 +52,6 @@ const Navigation = () => {
               <Nav.Link>
                 <i className="bi bi-globe me-1"></i>
                 Orbits
-                <Badge bg="info" className="ms-1">3D</Badge>
               </Nav.Link>
             </LinkContainer>
 
@@ -60,7 +59,6 @@ const Navigation = () => {
               <Nav.Link>
                 <i className="bi bi-cpu me-1"></i>
                 3D Test
-                <Badge bg="success" className="ms-1">NEW</Badge>
               </Nav.Link>
             </LinkContainer>
 
@@ -68,7 +66,6 @@ const Navigation = () => {
               <Nav.Link>
                 <i className="bi bi-vr me-1"></i>
                 VR Experience
-                <Badge bg="warning" className="ms-1">VR</Badge>
               </Nav.Link>
             </LinkContainer>
           </Nav>

@@ -10,13 +10,19 @@ const OrbitViewer = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const loadAsteroids = async () => {
+  const loadAsteroids = async (resetFilters = false) => {
     try {
       setLoading(true);
       setError('');
-      // Pull a reasonable number to keep render light
-      const { data } = await api.get('/api/asteroids?limit=99&sortBy=close_approach_data.0.epoch_date_close_approach&sortOrder=asc');
+      const { data } = await api.get(
+        '/api/asteroids?limit=99&sortBy=close_approach_data.0.epoch_date_close_approach&sortOrder=asc'
+      );
       setAsteroids(data.asteroids || []);
+      if (resetFilters) {
+        setHazardFilter('all');
+        setSelectedAsteroidId('all');
+        window.followAsteroid = false;
+      }
     } catch (e) {
       console.error('Failed to load asteroids', e);
       setError(e?.response?.data?.error || 'Failed to load asteroids');
@@ -26,104 +32,152 @@ const OrbitViewer = () => {
   };
 
   useEffect(() => {
-    loadAsteroids();
+    loadAsteroids(true);
   }, []);
 
-  // Filtrar asteroides según peligrosidad y selección
-  const filteredAsteroids = asteroids.filter(a => {
+  // Filter asteroids based on hazard level and selection
+  const filteredAsteroids = asteroids.filter((a) => {
     if (hazardFilter === 'hazardous') return a.is_potentially_hazardous_asteroid;
     if (hazardFilter === 'nonhazardous') return !a.is_potentially_hazardous_asteroid;
     return true;
   });
-  const visibleAsteroids = selectedAsteroidId === 'all'
-    ? filteredAsteroids
-    : filteredAsteroids.filter(a => String(a._id) === String(selectedAsteroidId));
 
+  const visibleAsteroids =
+    selectedAsteroidId === 'all'
+      ? filteredAsteroids
+      : filteredAsteroids.filter((a) => String(a._id) === String(selectedAsteroidId));
+
+  // 🌌 Interface
   return (
-    <div className="py-4" style={{
-      minHeight: '100vh',
-      marginTop: '70px', // Compensa la altura del navbar
-      background: 'radial-gradient(ellipse at center, #111 60%, #000 100%)',
-      backgroundImage: `url('https://raw.githubusercontent.com/microsoft/Azure-3D-Toolkit/main/docs/assets/stars-bg.png')`,
-      backgroundSize: 'cover',
-      backgroundRepeat: 'repeat',
-      backgroundPosition: 'center',
-    }}>
-      <Container>
-        <Row className="mb-3 align-items-center">
-          <Col>
-            <h2 className="mb-0">Earth Orbit Viewer</h2>
-            <small className="text-muted">Animated orbits derived from close approach data</small>
+    <div
+      style={{
+        minHeight: '100vh',
+        background: 'radial-gradient(ellipse at center, #0b0b13 60%, #000 100%)',
+        color: '#fff',
+        paddingTop: '80px', // Prevents overlap with fixed navbar
+      }}
+    >
+      <Container fluid className="py-4 px-5">
+        <Row>
+          {/* 🌟 LEFT CONTROL PANEL */}
+          <Col md={4} lg={3} className="mb-4">
+            <Card
+              className="bg-dark text-light border-secondary shadow-sm"
+              style={{ minHeight: '85vh', borderRadius: '10px' }}
+            >
+              <Card.Header
+                className="fw-bold text-uppercase text-warning"
+                style={{ borderBottom: '1px solid #333', fontSize: '1.2rem' }}
+              >
+                Orbit Controls
+              </Card.Header>
+              <Card.Body>
+                <div className="mb-3">
+                  {/* REFRESH BUTTON */}
+                  <Button
+                    variant="warning"
+                    onClick={() => loadAsteroids(true)}
+                    disabled={loading}
+                    className="w-100 fw-bold mb-3 text-dark"
+                    style={{
+                      background: 'linear-gradient(90deg, #ff7e29, #ffb347)',
+                      border: 'none',
+                    }}
+                  >
+                    {loading ? (
+                      <>
+                        <Spinner size="sm" className="me-2" />
+                        Loading...
+                      </>
+                    ) : (
+                      <>
+                        <i className="bi bi-arrow-clockwise me-2"></i>
+                        REFRESH
+                      </>
+                    )}
+                  </Button>
+
+                </div>
+
+                {/* 🔍 FILTERS */}
+                <div className="mb-4">
+                  <h6 className="text-uppercase text-info mb-2">
+                    <i className="bi bi-funnel me-2"></i>Filter by Hazard Level
+                  </h6>
+                  <div className="d-flex flex-wrap gap-2">
+                    <Button
+                      variant={hazardFilter === 'all' ? 'primary' : 'outline-light'}
+                      onClick={() => setHazardFilter('all')}
+                    >
+                      All
+                    </Button>
+                    <Button
+                      variant={hazardFilter === 'hazardous' ? 'danger' : 'outline-danger'}
+                      onClick={() => setHazardFilter('hazardous')}
+                    >
+                      Hazardous
+                    </Button>
+                    <Button
+                      variant={hazardFilter === 'nonhazardous' ? 'success' : 'outline-success'}
+                      onClick={() => setHazardFilter('nonhazardous')}
+                    >
+                      Non-Hazardous
+                    </Button>
+                  </div>
+                </div>
+
+                {/* 🌠 SELECTOR */}
+                <div>
+                  <h6 className="text-uppercase text-info mb-2">
+                    <i className="bi bi-globe-americas me-2"></i>Select Orbit
+                  </h6>
+                  <select
+                    id="asteroid-select"
+                    className="form-select bg-black text-light border-secondary"
+                    value={selectedAsteroidId}
+                    onChange={(e) => setSelectedAsteroidId(e.target.value)}
+                  >
+                    <option value="all">All Orbits</option>
+                    {filteredAsteroids.map((a) => (
+                      <option key={a._id} value={a._id}>
+                        {a.name || a.neo_reference_id || a._id}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </Card.Body>
+            </Card>
           </Col>
-          <Col xs="auto">
-            <Button variant="primary" onClick={loadAsteroids} disabled={loading}>
-              {loading ? (
-                <><Spinner size="sm" className="me-2" />Refreshing...</>
-              ) : (
-                <>Refresh</>
-              )}
-            </Button>
+
+          {/* 🌌 RIGHT 3D MODEL VIEW */}
+          <Col md={8} lg={9}>
+            <Card
+              className="bg-black border-secondary shadow-lg"
+              style={{ borderRadius: '10px', height: '85vh' }}
+            >
+              <Card.Header
+                className="text-uppercase fw-bold text-warning"
+                style={{ borderBottom: '1px solid #333', fontSize: '1.2rem' }}
+              >
+                Earth Orbit Simulation
+              </Card.Header>
+              <Card.Body className="p-0">
+                {error && (
+                  <div className="alert alert-warning py-2 mb-3">{error}</div>
+                )}
+                <OrbitView
+                  asteroids={visibleAsteroids}
+                  selectedAsteroid={
+                    visibleAsteroids.length === 1 ? visibleAsteroids[0] : null
+                  }
+                />
+              </Card.Body>
+            </Card>
           </Col>
         </Row>
-
-        {/* Filtros de peligrosidad y órbita/asteroide */}
-        {asteroids.length > 0 && (
-          <Row className="mb-3">
-            <Col md={3}>
-              <label htmlFor="hazard-filter" className="form-label">Filtrar por peligrosidad:</label>
-              <select
-                id="hazard-filter"
-                className="form-select"
-                value={hazardFilter}
-                onChange={e => {
-                  setHazardFilter(e.target.value);
-                  setSelectedAsteroidId('all'); // Reinicia selección al cambiar filtro
-                }}
-              >
-                <option value="all">Todos</option>
-                <option value="hazardous">Peligrosos</option>
-                <option value="nonhazardous">No peligrosos</option>
-              </select>
-            </Col>
-            <Col md={5}>
-              <label htmlFor="asteroid-select" className="form-label">Selecciona órbita/asteroide:</label>
-              <select
-                id="asteroid-select"
-                className="form-select"
-                value={selectedAsteroidId}
-                onChange={e => setSelectedAsteroidId(e.target.value)}
-              >
-                <option value="all">Todas</option>
-                {filteredAsteroids.map(a => (
-                  <option key={a._id} value={a._id}>
-                    {a.name || a.neo_reference_id || a._id}
-                  </option>
-                ))}
-              </select>
-            </Col>
-          </Row>
-        )}
-
-        <Card className="mb-3">
-          <Card.Body>
-            {error && (
-              <div className="alert alert-warning py-2 mb-3">{error}</div>
-            )}
-            <OrbitView 
-              asteroids={visibleAsteroids}
-              selectedAsteroid={visibleAsteroids.length === 1 ? visibleAsteroids[0] : null}
-            />
-          </Card.Body>
-        </Card>
-
-        <div className="text-muted" style={{ fontSize: 12 }}>
-          Note: Orbits are simplified for visualization and do not represent exact trajectories.
-        </div>
       </Container>
     </div>
   );
 };
 
 export default OrbitViewer;
-
-

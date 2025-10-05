@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/Nasa_app_challenge/static/css/main.a6ad4dd7.css",
+    "main.js": "/Nasa_app_challenge/static/js/main.bc549191.js",
+    "static/js/173.8b3552c1.chunk.js": "/Nasa_app_challenge/static/js/173.8b3552c1.chunk.js",
+    "static/js/431.1e6bcc5e.chunk.js": "/Nasa_app_challenge/static/js/431.1e6bcc5e.chunk.js",
+    "static/js/60.2caa849f.chunk.js": "/Nasa_app_challenge/static/js/60.2caa849f.chunk.js",
+    "static/js/401.9c5eb7d5.chunk.js": "/Nasa_app_challenge/static/js/401.9c5eb7d5.chunk.js",
+    "index.html": "/Nasa_app_challenge/index.html",
+    "main.a6ad4dd7.css.map": "/Nasa_app_challenge/static/css/main.a6ad4dd7.css.map",
+    "main.bc549191.js.map": "/Nasa_app_challenge/static/js/main.bc549191.js.map",
+    "173.8b3552c1.chunk.js.map": "/Nasa_app_challenge/static/js/173.8b3552c1.chunk.js.map",
+    "431.1e6bcc5e.chunk.js.map": "/Nasa_app_challenge/static/js/431.1e6bcc5e.chunk.js.map",
+    "60.2caa849f.chunk.js.map": "/Nasa_app_challenge/static/js/60.2caa849f.chunk.js.map",
+    "401.9c5eb7d5.chunk.js.map": "/Nasa_app_challenge/static/js/401.9c5eb7d5.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a6ad4dd7.css",
+    "static/js/main.bc549191.js"
+  ]
+}

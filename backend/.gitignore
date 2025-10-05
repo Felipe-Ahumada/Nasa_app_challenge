@@ -1,6 +1,5 @@
 .vercel
 
-.env
 
 api.js
 package.json
